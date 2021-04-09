@@ -1,69 +1,36 @@
 package sk.ujcik.restartmc.controller;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.function.Consumer;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sk.ujcik.restartmc.service.LinuxService;
 
 @RestController
 public class MinecraftController {
+	private final String MINECRAFT_FOLDER = "/home/minecraft";
+	private final String MINECRAFT_GT_FOLDER = "/home/minecraft/gtnewhorizon";
+
+	private final LinuxService linuxService;
+
+	public MinecraftController(LinuxService linuxService) {
+		this.linuxService = linuxService;
+	}
 
 	@GetMapping("/minecraftLog")
-	public String getMinecraftLog() throws IOException, InterruptedException {
-		boolean isWindows = System.getProperty("os.name")
-			.toLowerCase().startsWith("windows");
-		ProcessBuilder builder = new ProcessBuilder();
-		if (isWindows) {
-			builder.command("cmd.exe", "/c", "type trace.txt");
-		} else {
-			builder.command("sh", "-c", "tail -50 log-gt.txt");
-		}
-		builder.directory(new File("/home/minecraft"));
-
-		Process process = builder.start();
-
-
-		BufferedReader reader =
-			new BufferedReader(new InputStreamReader(process.getInputStream()));
-		StringBuilder stringBuilder = new StringBuilder();
-		String line;
-		while ( (line = reader.readLine()) != null) {
-			stringBuilder.append(line);
-			stringBuilder.append(System.getProperty("line.separator"));
-		}
-
-		return stringBuilder.toString();
+	public String getMinecraftLog() throws IOException {
+		return linuxService.runCommand("tail -50 log-gt.txt", MINECRAFT_FOLDER);
 	}
 
 	@PostMapping("/restart")
-	public String restartServer() throws Exception {
-		boolean isWindows = System.getProperty("os.name")
-			.toLowerCase().startsWith("windows");
-		ProcessBuilder builder = new ProcessBuilder();
-		if (isWindows) {
-			throw new Exception("Can not run on windows!");
-		} else {
-			builder.command("sh", "-c", "service minecraft-gt restart");
-		}
+	public String restartServer() throws IOException {
+		return linuxService.runCommand("service minecraft-gt restart", null);
+	}
 
-		Process process = builder.start();
-
-		BufferedReader reader =
-			new BufferedReader(new InputStreamReader(process.getInputStream()));
-		StringBuilder stringBuilder = new StringBuilder();
-		String line;
-		while ( (line = reader.readLine()) != null) {
-			stringBuilder.append(line);
-			stringBuilder.append(System.getProperty("line.separator"));
-		}
-
-		return stringBuilder.toString();
+	@GetMapping("/status")
+	public String getServerStatus() throws IOException {
+		return linuxService.runCommand("mcstatus localhost status", null);
 	}
 }
 
