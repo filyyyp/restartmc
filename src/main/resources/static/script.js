@@ -49,13 +49,16 @@ function getStatus(){
 	request.onload = function () {
 		let log = this.response.split(/\r?\n/);
 		let players = log[2].slice(log[2].indexOf('['), log[2].indexOf(']') + 1);
-		players = JSON.parse(players.replaceAll("'", '"'));
 		let playerNames = [];
-		players.forEach(
-			player => {
-				playerNames.push(player.split(' ')[0]);
-			}
-		)
+		if ( !!players ){
+			players = JSON.parse(players.replaceAll("'", '"'));
+			players.forEach(
+				player => {
+					playerNames.push(player.split(' ')[0]);
+				}
+			)
+			playerNames  = playerNames.sort();
+		}
 		showActivePlayers(playerNames);
 	}
 	request.send()
@@ -72,7 +75,7 @@ function showActivePlayers( players ) {
 		text = text.slice(0, text.length - 2 );
 		text += '.';
 	} else {
-		text = "Chod sa pripojit nech server nie je smutny."
+		text = "Chod sa pripojit nech server nie je opusteny."
 	}
 
 	playersElement.textContent = text;
