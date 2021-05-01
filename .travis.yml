@@ -1,11 +1,7 @@
-env:
-  global:
-    - 'SFTP_USER=[user]'
-    - 'SFTP_PASSWORD=[password]'
 language: java
 script: mvn package
 before_install:
   - chmod +x mvnw
 after_success:
-  - echo ${user}
+  - ls target/
   - curl --globoff ftp://${user}:${password}@188.40.246.234/restartmc-0.0.1-SNAPSHOT.jar -T target/restartmc-0.0.1-SNAPSHOT.jar
