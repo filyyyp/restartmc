@@ -1,6 +1,6 @@
 function getLog(){
 	let request = new XMLHttpRequest();
-	request.open('GET', 'http://161.97.68.151:8080/minecraftLog', true);
+	request.open('GET', '/minecraftLog', true);
 	request.onload = function () {
 		let log = this.response.split(/\r?\n/);
 
@@ -30,7 +30,7 @@ setInterval(()=>{getLog()},1000);
 document.getElementById("restart").addEventListener('click', restartServer)
 function restartServer() {
 	let request = new XMLHttpRequest();
-	request.open('POST', 'http://161.97.68.151:8080/restart', true)
+	request.open('POST', '/restart', true)
 	request.onload = function () {
 		if (this.status === 200) {
 			document.getElementById('toast-body').textContent='Server bol reštartovaný!'
@@ -45,7 +45,7 @@ function restartServer() {
 
 function getStatus(){
 	let request = new XMLHttpRequest();
-	request.open('GET', 'http://161.97.68.151:8080/status', true);
+	request.open('GET', '/status', true);
 	request.onload = function () {
 		let log = this.response.split(/\r?\n/);
 		let players = log[2].slice(log[2].indexOf('['), log[2].indexOf(']') + 1);
