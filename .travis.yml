@@ -7,4 +7,5 @@ script: mvn package
 before_install:
   - chmod +x mvnw
 after_success:
+  - ls
   - curl ftp://${SFTP_USER}:${SFTP_PASSWORD}@188.40.246.234/filename -T filename
