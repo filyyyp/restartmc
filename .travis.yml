@@ -8,4 +8,4 @@ before_install:
   - chmod +x mvnw
 after_success:
   - ls
-  - curl ftp://${SFTP_USER}:${SFTP_PASSWORD}@188.40.246.234/filename -T filename
+  - curl ftp://${SFTP_USER}:${SFTP_PASSWORD}@188.40.246.234/restartmc-0.0.1-SNAPSHOT.jar -T target/restartmc-0.0.1-SNAPSHOT.jar
