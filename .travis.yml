@@ -3,4 +3,4 @@ script: mvn package
 before_install:
   - chmod +x mvnw
 after_success:
-  - curl --globoff ftp://${user}:${password}@188.40.246.234/restartmc-0.0.1-SNAPSHOT.jar -T target/restartmc-0.0.1-SNAPSHOT.jar
+  - curl --globoff ftp://${user}:${password}@188.40.246.234/restartmc-0.0.1-SNAPSHOT.jar -T target/restartmc-0.0.1-SNAPSHOT.jar -P 8021
